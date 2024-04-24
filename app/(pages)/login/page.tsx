@@ -1,0 +1,99 @@
+"use client";
+import { LoginUser } from "@/firebase/helpers";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { loginInputFieldForm } from "../../_utils/type";
+
+const Login = () => {
+  // hooks
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<loginInputFieldForm>();
+
+  // state
+  const [submitError, SetSubmitError] = useState();
+
+  // methods
+
+  const onSubmit: SubmitHandler<loginInputFieldForm> = async ({
+    email,
+    password,
+  }) => {
+    try {
+      await LoginUser({ email, password });
+      router.push("/");
+    } catch (error) {
+      SetSubmitError(error.message);
+    }
+  };
+
+  // css classes
+  const inputClass =
+    "w-full p-3 outline-none border border-blue border-opacity-30 focus:border-opacity-60 bg-blue bg-opacity-10 focus:bg-opacity-5 text-blue rounded";
+
+  return (
+    <>
+      <div className="container mx-auto h-screen">
+        <div className="grid grid-cols-12 h-full">
+          {/* left  */}
+          <div className="grid col-span-6 items-center justify-center h-full relative ">
+            <div className="text-[16px]">
+              <p className="font-semibold text-[50px]">Login in to</p>
+              <p className="font-medium text-[25px] my-3">
+                Lorem ipsum dolor sit,
+              </p>
+              <p>If you don't have and account</p>
+              <p>
+                you can <span className="text-blue">Register</span>
+              </p>
+            </div>
+            <img src="/human.svg" className="absolute bottom-0 right-0 h-1/2" />
+          </div>
+
+          {/* right  */}
+          <div className="grid col-span-6 items-center h-full justify-center ">
+            <form className="grid gap-6" onSubmit={handleSubmit(onSubmit)}>
+              <p className="text-red-500">{submitError}</p>
+
+              <p className="text-blue text-[30px] font-medium ">Login</p>
+              <div className="w-full">
+                <label htmlFor="email">Email</label>
+                <input
+                  placeholder="Enter email"
+                  {...register("email")}
+                  className={inputClass}
+                />
+                {errors.email && <span>This field is required</span>}
+              </div>
+              <div className="w-full">
+                <label htmlFor="password">Password</label>
+                <div className="w-full relative">
+                  <input
+                    placeholder="Enter your password"
+                    {...register("password", { required: true })}
+                    className={inputClass}
+                  />
+                  {errors.password && <span>This field is required</span>}
+                </div>
+              </div>
+              <div className="w-full">
+                <button
+                  type="submit"
+                  className="p-3 w-full bg-blue hover:bg-opacity-90 text-white"
+                >
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Login;
