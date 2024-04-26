@@ -18,7 +18,6 @@ const Register = () => {
   const [submitError, SetSubmitError] = useState();
 
   // methods
-
   const onSubmit: SubmitHandler<registerInputFieldForm> = async ({
     email,
     password,

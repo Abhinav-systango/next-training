@@ -9,22 +9,23 @@ import Card from "../Card/Card";
 
 const BestSeller = () => {
   const [Categories, setCategories] = useState<[]>();
-  const [SelectedCategory, setSelectedCategory] = useState<string>('electronics');
+  const [SelectedCategory, setSelectedCategory] = useState<string>();
   const [products, setProducts] = useState<productInterface[]>();
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchCategories();
-        if (data) {
-          setCategories(data);
+        const categoriesData = await fetchCategories();
+        if (categoriesData) {
+          setCategories(categoriesData);
+          handleCategorySelect(categoriesData[0])
         }
       } catch (error) {
-        console.log("🚀 ~ fetch ~ error:", error);
+        console.log("Error fetching data:", error);
       }
     };
-    fetch();
-  }, []);
+    fetchData();
+  }, []); 
 
   const handleCategorySelect = async (category: string) => {
     setSelectedCategory(category);
@@ -41,7 +42,7 @@ const BestSeller = () => {
 
   return (
     <div>
-      <div className="container mx-auto">
+      <div className="container mx-auto py-10">
         <p className="text-center uppercase font-semibold">Best Seller</p>
 
         <ul className="flex gap-10 justify-center py-4 uppercase font-medium overflow-auto">
@@ -65,7 +66,6 @@ const BestSeller = () => {
               return <Card product={product} />;
             })}
         </div>
-            {products && <p className="mx-auto cursor-pointer text-blue border-b ">Load more...</p>}
       </div>
     </div>
   );

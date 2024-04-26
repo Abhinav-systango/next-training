@@ -1,8 +1,10 @@
 "use client";
 import { fetchProductsWithLimit } from "@/app/_api/FetchApis";
 import { productInterface } from "@/app/_utils/interface";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FcRating } from "react-icons/fc";
+import CarousalImage from "../../../public/images/carousal3.jpg"
 
 const Hero = () => {
   const [Products, setProducts] = useState<productInterface[]>();
@@ -24,7 +26,7 @@ const Hero = () => {
   return (
     <div className="md:relative">
             
-      <img src="/images/carousal3.jpg" alt="" className="w-full h-[calc(100vh_-_100px)] object-cover"/>
+      <Image src={CarousalImage} alt="" className="w-full h-[calc(100vh_-_100px)] object-cover"/>
 
       <div className=" w-full top-[85%]">
         <div className="flex justify-center gap-5 overflow-auto">
@@ -32,9 +34,12 @@ const Hero = () => {
             <div className="w-60 bg-slate-100 rounded-lg">
               <div className="flex flex-col gap-4 py-5 px-8 ">
                 <p className="font-medium text-sm h-10">{product.title}</p>
-                <img
-                  src={product.image}
-                  alt=""
+                <Image
+                 src={product.image}
+                 alt="Picture of the author"
+                 width={500}
+                 height={500}
+                 
                   className="bg-blend-multiply object-contain h-32 py-3"
                 />
                 <div className="flex items-center justify-between">

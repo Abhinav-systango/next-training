@@ -4,10 +4,13 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { loginInputFieldForm } from "../../_utils/type";
+import { useAppDispatch } from "@/app/_store/hooks";
+import { setAuthState } from "@/app/_store/features/authSlice";
 
 const Login = () => {
   // hooks
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const {
     register,
     handleSubmit,
@@ -24,8 +27,11 @@ const Login = () => {
     password,
   }) => {
     try {
-      await LoginUser({ email, password });
-      router.push("/");
+      const user = await LoginUser({ email, password });
+      if (user) {
+        dispatch(setAuthState({isLoggedIn: true, user: {name: user.displayName, email: user.email}})) 
+        router.push("/");
+      }
     } catch (error) {
       SetSubmitError(error.message);
     }

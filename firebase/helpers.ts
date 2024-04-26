@@ -8,6 +8,7 @@ export const RegisterNewUser = async({email, password, displayName}: userRegiste
     
   if (response) {
     await updateProfile(response.user, { displayName: displayName });
+    return response.user
   } else {
     throw new Error("Unable to register new user");
   }
