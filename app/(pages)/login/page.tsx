@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { loginInputFieldForm } from "../../_utils/type";
 import { useAppDispatch } from "@/app/_store/hooks";
-import { setAuthState } from "@/app/_store/features/authSlice";
+import { loginUser } from "@/app/_store/features/authSlice";
 
 const Login = () => {
   // hooks
@@ -28,9 +28,10 @@ const Login = () => {
   }) => {
     try {
       const user = await LoginUser({ email, password });
+      console.log("🚀 ~ Login ~ user:", user)
       if (user) {
-        dispatch(setAuthState({isLoggedIn: true, user: {name: user.displayName, email: user.email}})) 
-        router.push("/");
+        dispatch(loginUser({isLoggedIn: true, user: {}}))
+      //   router.push("/");
       }
     } catch (error) {
       SetSubmitError(error.message);

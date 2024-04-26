@@ -6,6 +6,7 @@ import { CgProfile, CgSearch, CgShoppingCart } from "react-icons/cg";
 
 const Header = () => {
   const { cart } = useAppSelector((state) => state.cart);
+  const { isLoggedIn, user } = useAppSelector((state) => state.auth);
   return (
     <div className="sticky top-0 z-50 bg-white">
       <div className="container mx-auto p-2">
@@ -21,9 +22,9 @@ const Header = () => {
 
           {/* right  */}
           <div className="flex flex-1 justify-between  md:justify-end gap-10">
-            <p className="flex items-center gap-1">
-              <CgProfile /> My profile
-            </p>
+           { isLoggedIn && <p className="flex items-center gap-1 cursor-pointer ">
+              <CgProfile /> {"adsfa"}
+            </p>}
             {/* cart  */}
             <Link href={"/cart"} className="relative">
               <div className="-top-1 absolute -right-2">

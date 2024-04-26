@@ -37,7 +37,7 @@ const page = ({ params }: { params: { productId: string } }) => {
         <div className="max-md:hidden md:col-span-4 grid justify-center h-screen overflow-auto">
           {products.map((product) => {
             return (
-              <div>
+              <div key={product.id + product.id}>
                 <Card product={product} />
               </div>
             );

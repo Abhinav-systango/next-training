@@ -1,56 +1,38 @@
 "use client";
-import {
-  fetchCategories,
-  fetchProductWithCategory,
-} from "@/app/_api/FetchApis";
-import { productInterface } from "@/app/_utils/interface";
 import React, { useEffect, useState } from "react";
 import Card from "../Card/Card";
+import { useAppDispatch, useAppSelector } from "@/app/_store/hooks";
+import { fetchAllCategories, fetchProductWithCategory } from "@/app/_store/features/categoriesSlice";
+import Loader from "../loader/Loader";
 
 const BestSeller = () => {
-  const [Categories, setCategories] = useState<[]>();
+  const dispatch = useAppDispatch()
   const [SelectedCategory, setSelectedCategory] = useState<string>();
-  const [products, setProducts] = useState<productInterface[]>();
-
+  const { categories, products, categoryLoading, productLoading  } = useAppSelector(state => state.categories)
+  console.log("🚀 ~ BestSeller ~ productLoading:", productLoading)
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const categoriesData = await fetchCategories();
-        if (categoriesData) {
-          setCategories(categoriesData);
-          handleCategorySelect(categoriesData[0])
-        }
-      } catch (error) {
-        console.log("Error fetching data:", error);
-      }
-    };
-    fetchData();
+      dispatch(fetchAllCategories())
+      dispatch(fetchProductWithCategory('electronics'))
   }, []); 
 
   const handleCategorySelect = async (category: string) => {
     setSelectedCategory(category);
-    // fetch product base on category
-    try {
-      const data = await fetchProductWithCategory(category);
-      if (data) {
-        setProducts(data);
-      }
-    } catch (error) {
-      console.log("🚀 ~ handleCategorySelect ~ error:", error);
-    }
+    dispatch(fetchProductWithCategory(category))
   };
 
   return (
     <div>
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto py-10 ">
         <p className="text-center uppercase font-semibold">Best Seller</p>
 
-        <ul className="flex gap-10 justify-center py-4 uppercase font-medium overflow-auto">
-          {Categories?.map((category) => {
+        <div className=" overflow-auto">
+        <ul className="w-[max-content] flex gap-10 mx-auto items-center uppercase font-medium">
+          {categories?.map((category) => {
             return (
               <li
+              key={category}
                 className={
-                  SelectedCategory === category ? "border-b-2 border-blue" : ""
+                  SelectedCategory === category ? "border-b-2 border-blue p-4" : ""
                 }
                 onClick={() => handleCategorySelect(category)}
               >
@@ -59,13 +41,14 @@ const BestSeller = () => {
             );
           })}
         </ul>
+        </div>
 
-        <div className="flex gap-3 md:gap-10 justify-center sm:flex-wrap overflow-auto">
+          {productLoading ? <Loader /> : <div className="flex max-md:flex-col md:flex-wrap md:gap-10 mx-auto max-md:items-center justify-center mt-3">
           {products &&
             products?.map((product) => {
-              return <Card product={product} />;
+              return <Card product={product} key={product.price  + product.price}/>;
             })}
-        </div>
+          </div>}
       </div>
     </div>
   );

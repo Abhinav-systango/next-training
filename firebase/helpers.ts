@@ -17,6 +17,8 @@ export const RegisterNewUser = async({email, password, displayName}: userRegiste
 export const LoginUser = async ({email, password}: userLoginData) => {
   const response = await signInWithEmailAndPassword(auth, email, password);
     if (response) {
+      console.log("🚀 ~ LoginUser ~ response:", response)
+      
       return response.user
     } else {
       throw new Error("login failed");

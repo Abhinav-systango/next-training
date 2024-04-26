@@ -165,28 +165,28 @@ const Checkout = () => {
         <div className="px-6 mt-10 flex flex-col gap-3  ">
           <div className="w-full flex justify-between  ">
             <p className="font-semibold">Subtotal:</p>
-            <p className="text-end">${Total}</p>
+            <p className="text-end">${(Total).toFixed(2)}</p>
           </div>
           <div className="w-full flex justify-between">
             <p className="font-semibold">Shipping Charges:</p>
-            <p className="text-end">${Total / 10}</p>
+            <p className="text-end">${(Total / 10).toFixed(2)}</p>
           </div>
           <div className="w-full flex justify-between">
             <p className="font-semibold">Tax:</p>
-            <p className="text-end">${(Total * 4) / 100}</p>
+            <p className="text-end">${((Total * 4) / 100).toFixed(2)}</p>
           </div>
           <hr className="text-white my-2 " />
           <div className="w-full flex justify-between">
             <p className="font-semibold">Total:</p>
             <p className="text-end">
-              ${Total + Total / 10 + (Total * 4) / 100}
+              ${(Total + Total / 10 + (Total * 4) / 100).toFixed(2)}
             </p>
           </div>
         </div>
         <div className="px-4">
           <button
             className="py-3 bg-white w-full text-blue mt-10 text-medium hover:bg-white/80 "
-            onClick={() => orderPlace()}
+            onClick={() => orderPlace()}  
           >
             Payment
           </button>

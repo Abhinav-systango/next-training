@@ -8,11 +8,19 @@ import {
 import { useAppDispatch, useAppSelector } from "@/app/_store/hooks";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 
 const Cart = () => {
   // redux
+  const { isLoggedIn, user } = useAppSelector((state) => state.auth);
+  const router = useRouter()
+  if(!isLoggedIn){
+    router.push('/login')
+  }
+
+  console.log("🚀 ~ Cart ~ isLoggedIn:", isLoggedIn)
   const { cart, qty } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
 
@@ -60,7 +68,7 @@ const Cart = () => {
             <tbody>
               {cart.map((item) => {
                 return (
-                  <tr className="">
+                  <tr className="" key={item.id}>
                     <td className="py-3 w-36  ">
                       <Image
                         src={item.image}
