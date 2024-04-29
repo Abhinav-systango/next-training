@@ -10,6 +10,7 @@ import { productInterface } from "@/app/_utils/interface";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { FcRating } from "react-icons/fc";
+import Skeleton from "react-loading-skeleton";
 
 const page = ({ params }: { params: { productId: string } }) => {
 
@@ -34,16 +35,17 @@ const page = ({ params }: { params: { productId: string } }) => {
   return (
     <div className="container mx-auto my-5">
       <div className="md:grid  md:grid-cols-12  h-screen  ">
-        <div className="max-md:hidden md:col-span-4 grid justify-center h-screen overflow-auto">
+        {loading ?<Skeleton/> :<div className="max-md:hidden md:col-span-4 grid justify-center h-screen overflow-auto">
           {products.map((product) => {
             return (
-              <div key={product.id + product.id}>
+              <div key={Math.random()}>
                 <Card product={product} />
               </div>
             );
           })}
-        </div>
-        <div className="md:col-span-8  grid justify-center">
+        </div>}
+        
+        {loading ? <Skeleton /> :<div className="md:col-span-8  grid justify-center">
           <div className="px-6  ">
             <p className="py-2 font-medium">
               <span className="font-bold text-black mr-2">{product.id} / </span>
@@ -82,7 +84,7 @@ const page = ({ params }: { params: { productId: string } }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );

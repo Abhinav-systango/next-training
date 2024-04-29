@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Card from "../Card/Card";
 import { useAppDispatch, useAppSelector } from "@/app/_store/hooks";
 import { fetchAllCategories, fetchProductWithCategory } from "@/app/_store/features/categoriesSlice";
-import Loader from "../loader/Loader";
+import Skeleton from "react-loading-skeleton";
 
 const BestSeller = () => {
   const dispatch = useAppDispatch()
@@ -30,7 +30,7 @@ const BestSeller = () => {
           {categories?.map((category) => {
             return (
               <li
-              key={category}
+              key={Math.random()}
                 className={
                   SelectedCategory === category ? "border-b-2 border-blue p-4" : ""
                 }
@@ -43,10 +43,10 @@ const BestSeller = () => {
         </ul>
         </div>
 
-          {productLoading ? <Loader /> : <div className="flex max-md:flex-col md:flex-wrap md:gap-10 mx-auto max-md:items-center justify-center mt-3">
+          {productLoading ? <Skeleton /> : <div className="flex max-md:flex-col md:flex-wrap md:gap-10 mx-auto max-md:items-center justify-center mt-3">
           {products &&
             products?.map((product) => {
-              return <Card product={product} key={product.price  + product.price}/>;
+              return <Card product={product} key={Math.random()}/>;
             })}
           </div>}
       </div>

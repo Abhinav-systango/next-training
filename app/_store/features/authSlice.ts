@@ -1,15 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { User, UserCredential, UserInfo, UserMetadata, UserProfile } from "firebase/auth";
 
 export interface IAuthState {
-  isLoggedIn: boolean;
-  user: UserProfile | null
+  isLoggedIn: boolean
+  user: {
+    name: string | null,
+    email: string | null,
+    uid: string | null
+  }
+
 }
 
 const initialState: IAuthState = {
   isLoggedIn: false,
-  user: null
+  user: {
+    name: null,
+    email: null,
+    uid: null
+  }
 };
 
 export const authSlice = createSlice({
@@ -21,8 +29,12 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
     },
 
-    logoutUser: (state, action) => {
-      state.user = null
+    logoutUser: (state) => {
+      state.user = {
+        name: null,
+        email: null,
+        uid: null
+      }
       state.isLoggedIn = false
     }
   },

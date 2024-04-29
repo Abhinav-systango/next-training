@@ -1,8 +1,9 @@
 import React from 'react'
+import Skeleton from 'react-loading-skeleton'
 
 const loading = () => {
   return (
-    <div className='h-screen flex justify-center items-center text-blue bg-white/30'><p>Loading</p></div>
+    <div className='h-screen flex justify-center items-center'><Skeleton /></div>
   )
 }
 

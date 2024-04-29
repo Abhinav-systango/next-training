@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { loginInputFieldForm } from "../../_utils/type";
 import { useAppDispatch } from "@/app/_store/hooks";
 import { loginUser } from "@/app/_store/features/authSlice";
+import Link from "next/link";
 
 const Login = () => {
   // hooks
@@ -21,17 +22,19 @@ const Login = () => {
   const [submitError, SetSubmitError] = useState();
 
   // methods
-
   const onSubmit: SubmitHandler<loginInputFieldForm> = async ({
     email,
     password,
   }) => {
     try {
       const user = await LoginUser({ email, password });
-      console.log("🚀 ~ Login ~ user:", user)
       if (user) {
-        dispatch(loginUser({isLoggedIn: true, user: {}}))
-      //   router.push("/");
+        dispatch(loginUser({isLoggedIn: true, user: {
+          name: user.displayName,
+          email: user.email,
+          uid: user.uid
+        }}))
+        router.push("/");
       }
     } catch (error) {
       SetSubmitError(error.message);
@@ -55,7 +58,7 @@ const Login = () => {
               </p>
               <p>If you don't have and account</p>
               <p>
-                you can <span className="text-blue">Register</span>
+                you can <Link href={'/register'} className="text-blue">Register</Link>
               </p>
             </div>
             <img src="/human.svg" className="absolute bottom-0 right-0 h-1/2" />

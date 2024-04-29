@@ -4,10 +4,15 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { registerInputFieldForm } from "../../_utils/type";
+import { useAppDispatch } from "@/app/_store/hooks";
+import { loginUser } from "@/app/_store/features/authSlice";
 
 const Register = () => {
   // hooks
   const router = useRouter();
+  const dispatch = useAppDispatch(
+
+  )
   const {
     register,
     handleSubmit,
@@ -24,8 +29,15 @@ const Register = () => {
     displayName,
   }) => {
     try {
-      await RegisterNewUser({ email, password, displayName });
-      router.push("/");
+      const user = await RegisterNewUser({ email, password, displayName });
+      if (user) {
+        dispatch(loginUser({isLoggedIn: true, user: {
+          name: user.displayName,
+          email: user.email,
+          uid: user.uid
+        }}))
+        router.push("/");
+      }
     } catch (error) {
       SetSubmitError(error.message);
     }

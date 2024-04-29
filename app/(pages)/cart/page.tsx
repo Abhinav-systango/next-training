@@ -1,5 +1,4 @@
 "use client";
-import Navbar from "@/app/_components/navbar/Navbar";
 import {
   QtyInc,
   QtyRemove,
@@ -8,21 +7,22 @@ import {
 import { useAppDispatch, useAppSelector } from "@/app/_store/hooks";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
+import Navbar from "@/app/_components/navbar/Navbar";
 
 const Cart = () => {
   // redux
-  const { isLoggedIn, user } = useAppSelector((state) => state.auth);
-  const router = useRouter()
-  if(!isLoggedIn){
-    router.push('/login')
-  }
-
-  console.log("🚀 ~ Cart ~ isLoggedIn:", isLoggedIn)
+  const { isLoggedIn } = useAppSelector((state) => state.auth);
   const { cart, qty } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
+  
+  useLayoutEffect(() => {
+    if (!isLoggedIn) {
+      redirect('/login')
+    }
+  }, [])
 
   // states
   const [Total, setTotal] = useState<number>(0);
@@ -68,7 +68,7 @@ const Cart = () => {
             <tbody>
               {cart.map((item) => {
                 return (
-                  <tr className="" key={item.id}>
+                  <tr className="" key={Math.random()}>
                     <td className="py-3 w-36  ">
                       <Image
                         src={item.image}
@@ -101,17 +101,14 @@ const Cart = () => {
               })}
             </tbody>
           </table>
-          {cart && cart.length > 0 && (
+          {cart.length > 0 ? 
             <div className="mt-5">
               <p className="text-end px-10">
-                Total: <span className="text-blue">${Total}</span>
+                Total: <span className="text-blue">${Total.toFixed(2)}</span>
               </p>
             </div>
-          )}
+           : <p className="p-4 text-center">No product added in the cart</p>}
 
-          {cart.length < 1 && (
-            <p className="p-4 text-center">No product added in the cart</p>
-          )}
         </div>
 
         {cart.length > 0 && (

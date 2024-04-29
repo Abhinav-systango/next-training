@@ -23,7 +23,7 @@ const Header = () => {
           {/* right  */}
           <div className="flex flex-1 justify-between  md:justify-end gap-10">
            { isLoggedIn && <p className="flex items-center gap-1 cursor-pointer ">
-              <CgProfile /> {"adsfa"}
+              <CgProfile /> {user?.name}
             </p>}
             {/* cart  */}
             <Link href={"/cart"} className="relative">
@@ -39,7 +39,7 @@ const Header = () => {
               <input
                 type="text"
                 placeholder="$0.00"
-                className="border-none outline-none w-16 focus:w-full"
+                className="border-none outline-none w-16 focus:w-full bg-white"
               />
               <CgSearch />
             </div>

@@ -1,18 +1,22 @@
 "use client";
 import { useAppSelector } from "@/app/_store/hooks";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { redirect, useRouter } from "next/navigation";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { FaAddressBook } from "react-icons/fa";
 import { MdSummarize } from "react-icons/md";
 
 const Checkout = () => {
 
   // hooks 
+  const { isLoggedIn } = useAppSelector((state) => state.auth);
   const { cart, qty } = useAppSelector((state) => state.cart);
-  console.log("🚀 ~ Checkout ~ cart:", cart);
   const router = useRouter();
-
+  useLayoutEffect(() => {
+    if (!isLoggedIn) {
+      redirect('/login')
+    }
+  }, [])
   // hooks form 
   type Inputs = {
     firstName: string
@@ -21,6 +25,7 @@ const Checkout = () => {
     address_line_2: string,
     city: string,
     state: string,
+    phone: string
     pincode: string
   }
   
@@ -64,11 +69,13 @@ const Checkout = () => {
     router.push("/");
   };
 
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
   
 
   return (
     <div className="grid grid-cols-12 gap-3 h-screen">
       <div className="col-span-8 bg-slate-200">
+        <form onChange={handleSubmit(onSubmit)}>
         {/* shipping address  */}
         <div className="flex items-center py-3 px-4 bg-blue text-white font-medium uppercase gap-3">
           <p>Shipping Address</p>
@@ -80,11 +87,14 @@ const Checkout = () => {
               type="text"
               placeholder="first name"
               className="px-4 w-full py-2 rounded outline-none border-blue focus:border"
+              {...register('firstName')}
             />
             <input
               type="text"
               placeholder="last name"
               className="px-4 w-full py-2 rounded outline-none border-blue focus:border"
+              {...register('lastName')}
+
             />
           </div>
 
@@ -93,6 +103,7 @@ const Checkout = () => {
               type="text"
               placeholder="Address line 1"
               className="px-4  py-2 w-full rounded outline-none border-blue focus:border"
+              {...register('address_line_1')}
             />
           </div>
           <div className="md:flex px-4">
@@ -100,6 +111,8 @@ const Checkout = () => {
               type="text"
               placeholder="Address line 2 (optional)"
               className="px-4 w-full py-2 rounded outline-none border-blue focus:border"
+              {...register('address_line_2')}
+
             />
           </div>
 
@@ -108,11 +121,13 @@ const Checkout = () => {
               type="text"
               placeholder="City"
               className="px-4  py-2 w-full rounded outline-none border-blue focus:border"
+              {...register('city')}
             />
             <input
               type="text"
               placeholder="State"
-              className="px-4 w-full  py-2 rounded outline-none border-blue focus:border"
+              className="px-4 w-full py-2 rounded outline-none border-blue focus:border"
+              {...register('state')}
             />
           </div>
 
@@ -121,18 +136,20 @@ const Checkout = () => {
               type="text"
               placeholder="Phone"
               className="px-4  py-2 w-full rounded outline-none border-blue focus:border"
+              {...register('phone')}
             />
             <input
               type="text"
-              placeholder="Email"
+              placeholder="Pincode"
               className="px-4 w-full  py-2 rounded outline-none border-blue focus:border"
+              {...register('pincode')}
             />
           </div>
         </div>
 
         {/* existing address  */}
         <div className="flex items-center py-3 px-4 bg-blue text-white font-medium uppercase gap-3">
-          <p>Existing Address</p>
+          <p>Existing Address</p> 
           <FaAddressBook />
         </div>
 
@@ -155,6 +172,7 @@ const Checkout = () => {
             </div>
           </div>
         </div>
+        </form>
       </div>
       <div className="col-span-4 bg-blue text-white ">
         <div className="flex items-center py-3 px-4 bg-white/30 text-white font-medium uppercase gap-3">
