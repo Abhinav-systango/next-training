@@ -1,7 +1,8 @@
 "use client";
+import WithAuthenticate from "@/app/_components/hoc/WithAuthenticate";
 import { useAppSelector } from "@/app/_store/hooks";
-import { redirect, useRouter } from "next/navigation";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaAddressBook } from "react-icons/fa";
 import { MdSummarize } from "react-icons/md";
@@ -9,14 +10,9 @@ import { MdSummarize } from "react-icons/md";
 const Checkout = () => {
 
   // hooks 
-  const { isLoggedIn } = useAppSelector((state) => state.auth);
   const { cart, qty } = useAppSelector((state) => state.cart);
   const router = useRouter();
-  useLayoutEffect(() => {
-    if (!isLoggedIn) {
-      redirect('/login')
-    }
-  }, [])
+
   // hooks form 
   type Inputs = {
     firstName: string
@@ -73,8 +69,8 @@ const Checkout = () => {
   
 
   return (
-    <div className="grid grid-cols-12 gap-3 h-screen">
-      <div className="col-span-8 bg-slate-200">
+    <div className="grid md:grid-cols-12 gap-3 md:h-screen">
+      <div className="md:col-span-8 bg-slate-200">
         <form onChange={handleSubmit(onSubmit)}>
         {/* shipping address  */}
         <div className="flex items-center py-3 px-4 bg-blue text-white font-medium uppercase gap-3">
@@ -148,14 +144,14 @@ const Checkout = () => {
         </div>
 
         {/* existing address  */}
-        <div className="flex items-center py-3 px-4 bg-blue text-white font-medium uppercase gap-3">
+        <div className="flex items-center py-3 px-4 bg-blue text-white font-medium uppercase md:gap-3">
           <p>Existing Address</p> 
           <FaAddressBook />
         </div>
 
-        <div className="bg-white m-4 p-4 flex flex-col gap-4 w-full">
+        <div className="bg-white md:m-4 p-4 flex flex-col gap-4 w-full">
           <div
-            className={`p-4 w-1/2 ${
+            className={`p-4 md:w-1/2 ${
               selectExistingAddress === 0
                 ? "border-blue/60 border-2 rounded bg-blue/10"
                 : "border-gray-400 rounded border-2 bg-gray-200"
@@ -174,13 +170,14 @@ const Checkout = () => {
         </div>
         </form>
       </div>
-      <div className="col-span-4 bg-blue text-white ">
+      
+      <div className="md:col-span-4 bg-blue text-white h-full ">
         <div className="flex items-center py-3 px-4 bg-white/30 text-white font-medium uppercase gap-3">
           <p>Summary</p>
           <MdSummarize />
         </div>
 
-        <div className="px-6 mt-10 flex flex-col gap-3  ">
+        <div className="px-6 py-10 md:mt-10 flex flex-col gap-3 h-auto">
           <div className="w-full flex justify-between  ">
             <p className="font-semibold">Subtotal:</p>
             <p className="text-end">${(Total).toFixed(2)}</p>
@@ -201,17 +198,17 @@ const Checkout = () => {
             </p>
           </div>
         </div>
-        <div className="px-4">
-          <button
-            className="py-3 bg-white w-full text-blue mt-10 text-medium hover:bg-white/80 "
-            onClick={() => orderPlace()}  
-          >
-            Payment
-          </button>
-        </div>
+          <div className="px-4">
+            <button
+              className="my-3 bg-white w-full text-blue mt-10 text-medium hover:bg-white/80 "
+              onClick={() => orderPlace()}  
+            >
+              Payment
+            </button>
+          </div>
       </div>
     </div>
   );
 };
 
-export default Checkout;
+export default WithAuthenticate(Checkout);

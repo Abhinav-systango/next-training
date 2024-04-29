@@ -25,7 +25,7 @@ const Card = ({product}: {product: productInterface}) => {
         <div className='bg-gray-200 flex flex-col gap-1 py-2 px-3 text-center rounded-b-lg shadow'>
             <p className='text-xs font-medium'>{product?.title}</p>
             <p className='text-xs text-gray-500 flex items-center justify-center gap-1'><FcRating />{product?.rating?.count}</p>
-            <p className='text-md text-blue  '>{product?.price}</p>
+            <p className='text-md text-blue  '> ${product?.price}</p>
             <button className='bg-blue text-white p-2 text-xs hover:bg-opacity-70'
               onClick={() => handleAddToCart(product)}
             >Add to Cart</button>

@@ -7,22 +7,15 @@ import {
 import { useAppDispatch, useAppSelector } from "@/app/_store/hooks";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import Navbar from "@/app/_components/navbar/Navbar";
+import WithAuthenticate from "@/app/_components/hoc/WithAuthenticate";
 
 const Cart = () => {
   // redux
-  const { isLoggedIn } = useAppSelector((state) => state.auth);
   const { cart, qty } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
-  
-  useLayoutEffect(() => {
-    if (!isLoggedIn) {
-      redirect('/login')
-    }
-  }, [])
 
   // states
   const [Total, setTotal] = useState<number>(0);
@@ -55,7 +48,7 @@ const Cart = () => {
       <Navbar />
       <div className="container mx-auto mt-10">
         <div className="overflow-auto">
-          <table className="w-full text-center shadow rounded">
+          <table className="w-full text-center shadow rounded overflow-auto">
             <thead className="bg-blue/30">
               <tr className="">
                 <th className={tHead}>Image</th>
@@ -78,7 +71,7 @@ const Cart = () => {
                         className="object-contain aspect-auto mx-auto cursor-pointer"
                       />
                     </td>
-                    <td className="text-xs text-start px-1 ">{item.title}</td>
+                    <td className="text-xs text-start px-1 w-56">{item.title}</td>
                     <td className="text-xs px-1 w-36 capitalize">
                       {item.category}
                     </td>
@@ -126,4 +119,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default WithAuthenticate(Cart);

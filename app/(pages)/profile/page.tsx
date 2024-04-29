@@ -1,4 +1,5 @@
 'use client'
+import WithAuthenticate from '@/app/_components/hoc/WithAuthenticate'
 import { useAppSelector } from '@/app/_store/hooks'
 import React from 'react'
 
@@ -17,4 +18,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default WithAuthenticate(Profile);
