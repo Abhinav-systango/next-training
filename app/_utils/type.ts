@@ -19,3 +19,15 @@ export type loginInputFieldForm = {
   email: string;
   password: string;
 };
+
+
+export type CheckoutAddressT = {
+  firstName: string
+  lastName: string,
+  address_line_1: string,
+  address_line_2: string,
+  city: string,
+  state: string,
+  phone: string
+  pincode: string
+}

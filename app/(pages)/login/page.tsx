@@ -7,6 +7,7 @@ import { loginInputFieldForm } from "../../_utils/type";
 import { useAppDispatch } from "@/app/_store/hooks";
 import { loginUser } from "@/app/_store/features/authSlice";
 import Link from "next/link";
+import Loading from "@/app/loading";
 
 const Login = () => {
   // hooks
@@ -20,12 +21,13 @@ const Login = () => {
 
   // state
   const [submitError, SetSubmitError] = useState();
-
+  const [loading, setLoading] = useState<Boolean>(false)
   // methods
   const onSubmit: SubmitHandler<loginInputFieldForm> = async ({
     email,
     password,
   }) => {
+    setLoading(true)
     try {
       const user = await LoginUser({ email, password });
       if (user) {
@@ -35,8 +37,10 @@ const Login = () => {
           uid: user.uid
         }}))
         router.push("/");
+        setLoading(false)
       }
     } catch (error) {
+      setLoading(false)
       SetSubmitError(error.message);
     }
   };
@@ -45,6 +49,10 @@ const Login = () => {
   const inputClass =
     "w-full p-3 outline-none border border-blue border-opacity-30 focus:border-opacity-60 bg-blue bg-opacity-10 focus:bg-opacity-5 text-blue rounded";
 
+  if (loading) {
+    return <Loading />
+  }
+  
   return (
     <>
       <div className="container mx-auto h-screen">

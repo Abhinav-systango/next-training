@@ -1,6 +1,7 @@
 "use client";
 import WithAuthenticate from "@/app/_components/hoc/WithAuthenticate";
 import { useAppSelector } from "@/app/_store/hooks";
+import { CheckoutAddressT } from "@/app/_utils/type";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -13,28 +14,15 @@ const Checkout = () => {
   const { cart, qty } = useAppSelector((state) => state.cart);
   const router = useRouter();
 
-  // hooks form 
-  type Inputs = {
-    firstName: string
-    lastName: string,
-    address_line_1: string,
-    address_line_2: string,
-    city: string,
-    state: string,
-    phone: string
-    pincode: string
-  }
-  
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<Inputs>()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CheckoutAddressT>()
 
   // state
   const [selectExistingAddress, setSelectExistingAddress] = useState<any>(null);
   const [Total, setTotal] = useState<number>(0);
-  console.log("🚀 ~ Checkout ~ Total:", Total);
 
   // methods
   const handleAddressSelect = (index: number) => {
@@ -65,7 +53,7 @@ const Checkout = () => {
     router.push("/");
   };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<CheckoutAddressT> = (data) => console.log(data)
   
 
   return (

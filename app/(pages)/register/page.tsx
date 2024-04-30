@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { registerInputFieldForm } from "../../_utils/type";
 import { useAppDispatch } from "@/app/_store/hooks";
 import { loginUser } from "@/app/_store/features/authSlice";
+import Loading from "@/app/loading";
 
 const Register = () => {
   // hooks
@@ -21,7 +22,7 @@ const Register = () => {
 
   // state
   const [submitError, SetSubmitError] = useState();
-
+  const [loading, setLoading] = useState<boolean>(false)
   // methods
   const onSubmit: SubmitHandler<registerInputFieldForm> = async ({
     email,
@@ -29,6 +30,7 @@ const Register = () => {
     displayName,
   }) => {
     try {
+      setLoading(true)
       const user = await RegisterNewUser({ email, password, displayName });
       if (user) {
         dispatch(loginUser({isLoggedIn: true, user: {
@@ -37,15 +39,21 @@ const Register = () => {
           uid: user.uid
         }}))
         router.push("/");
+        setLoading(false)
       }
     } catch (error) {
       SetSubmitError(error.message);
+      setLoading(false)
     }
   };
 
   // css classes
   const inputClass =
     "w-full p-3 outline-none border border-blue border-opacity-30 focus:border-opacity-60 bg-blue bg-opacity-10 focus:bg-opacity-5 text-blue rounded";
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <>

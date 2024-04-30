@@ -1,10 +1,5 @@
-import React from 'react'
-import Skeleton from 'react-loading-skeleton'
+import Loader from "./_components/loaders/Loader";
 
-const loading = () => {
-  return (
-    <div className='h-screen flex justify-center items-center'><Skeleton /></div>
-  )
+export default function Loading() {
+  return <Loader />
 }
-
-export default loading

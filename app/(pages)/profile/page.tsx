@@ -7,7 +7,7 @@ const Profile = () => {
   let {user} = useAppSelector((state ) => state.auth)
 
   return (
-        <div className='w-full h-screen flex justify-center items-center'>
+        <div className='w-full h-full flex justify-center items-center'>
             <div className='  bg-[#fff] p-10'>
                 <p>User id :- {user?.uid}</p>
                 <p>User Email :- {user?.email}</p>

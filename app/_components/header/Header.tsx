@@ -5,6 +5,7 @@ import React from "react";
 import { CgProfile, CgSearch, CgShoppingCart } from "react-icons/cg";
 
 const Header = () => {
+  // state 
   const { cart } = useAppSelector((state) => state.cart);
   const { isLoggedIn, user } = useAppSelector((state) => state.auth);
   return (

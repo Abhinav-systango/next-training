@@ -6,15 +6,20 @@ import { fetchAllCategories, fetchProductWithCategory } from "@/app/_store/featu
 import Skeleton from "react-loading-skeleton";
 
 const BestSeller = () => {
+  // state 
   const dispatch = useAppDispatch()
   const [SelectedCategory, setSelectedCategory] = useState<string>();
   const { categories, products, categoryLoading, productLoading  } = useAppSelector(state => state.categories)
+
   console.log("🚀 ~ BestSeller ~ productLoading:", productLoading)
+
+  // effects 
   useEffect(() => {
       dispatch(fetchAllCategories())
       dispatch(fetchProductWithCategory('electronics'))
   }, []); 
 
+  // methods 
   const handleCategorySelect = async (category: string) => {
     setSelectedCategory(category);
     dispatch(fetchProductWithCategory(category))

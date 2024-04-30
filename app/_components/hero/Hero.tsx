@@ -5,11 +5,14 @@ import { FcRating } from "react-icons/fc";
 import CarousalImage from "../../../public/images/carousal3.jpg"
 import { useAppDispatch, useAppSelector } from "@/app/_store/hooks";
 import { fetchAllProducts } from "@/app/_store/features/productsSlice";
+import Skeleton from "react-loading-skeleton";
 
 const Hero = () => {
-
-  const {products, loading} = useAppSelector(state => state.products)
+  // state
+  const {products, productsLoading} = useAppSelector(state => state.products)
   const dispatch = useAppDispatch()
+
+  // effect 
   useEffect(() => {
       dispatch(fetchAllProducts())
   }, []);
@@ -21,7 +24,7 @@ const Hero = () => {
 
       <div className=" w-full md:top-[85%]">
         <div className="flex md:justify-center md:gap-5 overflow-auto">
-          {products?.slice(0,3).map((product) => (
+          {productsLoading ? <Skeleton /> : <>{products?.slice(0,3).map((product) => (
             <div className="w-60 bg-slate-100 rounded-lg" key={product.category + product.image}>
               <div className="flex flex-col gap-4 py-5 px-8 ">
                 <p className="font-medium text-sm h-10">{product.title}</p>
@@ -44,7 +47,7 @@ const Hero = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))}</>}
         </div>
       </div>
     </div>

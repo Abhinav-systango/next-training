@@ -16,13 +16,13 @@ const page = ({ params }: { params: { productId: string } }) => {
 
   // hooks 
   const dispatch = useAppDispatch();
-  const { product, loading, error, products } = useAppSelector(
+  const { product, productLoading, error, products } = useAppSelector(
     (state) => state.products
   );
 
   // effects 
   useEffect(() => {
-    console.log("🚀 ~ page ~ loading:", loading);
+    console.log("🚀 ~ page ~ productLoading:", productLoading);
     dispatch(fetchAllProducts());
     dispatch(fetchProduct(params.productId));
   }, []);
@@ -35,8 +35,8 @@ const page = ({ params }: { params: { productId: string } }) => {
   return (
     <div className="container mx-auto my-5">
       <div className="md:grid  md:grid-cols-12  h-screen  ">
-        {loading ?<Skeleton/> :<div className="max-md:hidden md:col-span-4 grid justify-center h-screen overflow-auto">
-          {products.map((product) => {
+        {productLoading ?<Skeleton/> :<div className="max-md:hidden md:col-span-4 grid justify-center h-screen overflow-auto">
+          {products.filter(item => item.category === product.category).map((product) => {
             return (
               <div key={Math.random()}>
                 <Card product={product} />
@@ -45,7 +45,7 @@ const page = ({ params }: { params: { productId: string } }) => {
           })}
         </div>}
         
-        {loading ? <Skeleton /> :<div className="md:col-span-8  grid justify-center">
+        {productLoading ? <Skeleton /> :<div className="md:col-span-8  grid justify-center">
           <div className="px-6  ">
             <p className="py-2 font-medium">
               <span className="font-bold text-black mr-2">{product.id} / </span>

@@ -1,23 +1,10 @@
+import { IAuthState } from "@/app/_utils/interface";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface IAuthState {
-  isLoggedIn: boolean
-  user: {
-    name: string | null,
-    email: string | null,
-    uid: string | null
-  }
-
-}
-
 const initialState: IAuthState = {
   isLoggedIn: false,
-  user: {
-    name: null,
-    email: null,
-    uid: null
-  }
+  user: null
 };
 
 export const authSlice = createSlice({
@@ -30,11 +17,7 @@ export const authSlice = createSlice({
     },
 
     logoutUser: (state) => {
-      state.user = {
-        name: null,
-        email: null,
-        uid: null
-      }
+      state.user = null
       state.isLoggedIn = false
     }
   },

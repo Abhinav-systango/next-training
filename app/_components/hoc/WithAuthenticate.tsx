@@ -4,7 +4,7 @@ import { useAppSelector } from '@/app/_store/hooks'
 import { redirect } from 'next/navigation'
 import React, { useEffect } from 'react'
 
-const WithAuthenticate = (Components: any) => {
+const WithAuthenticate = (Components: React.FunctionComponent) => {
   
   return function Auth(props: any){
     const {isLoggedIn}  = useAppSelector(state => state.auth)

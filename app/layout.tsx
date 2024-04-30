@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
 import 'react-loading-skeleton/dist/skeleton.css'
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -24,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} bg-white`}>
+        <Suspense fallback={<Loading />}>
         <StoreProvider>{children}</StoreProvider>
+        </Suspense>
       </body>
     </html>
   );

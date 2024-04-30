@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 
 const Navbar = () => {
+  // state 
   const { isLoggedIn } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 

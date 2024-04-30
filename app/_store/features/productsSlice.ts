@@ -1,15 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { productInterface } from "@/app/_utils/interface";
+  import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+  import { IProductState } from "@/app/_utils/interface";
 
-interface productStateInterface {
-    products: productInterface[],
-    product: productInterface
-    loading: boolean,
-    error: string | undefined
-}
-
-// Define the initial state using that type
-const initialState: productStateInterface = {
+  const initialState: IProductState = {
     products: [],
     product: {
       id: 0,
@@ -23,56 +15,62 @@ const initialState: productStateInterface = {
         count: 0
       }
     },
-    loading: true,
-    error: ''
-};
+    productsLoading: true,
+    productLoading: true,
+    error: '',
+  };
 
+  export const fetchAllProducts = createAsyncThunk("products/fetchAllProducts", async () => {
+    const response = await fetch("https://fakestoreapi.com/products");
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error("Failed to fetch products");
+    }
+  });
+  
+  export const fetchProduct = createAsyncThunk("products/fetchProduct", async (productId: string) => {
+    const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error("Failed to fetch product details");
+    }
+  });
 
-const fetchAllProducts = createAsyncThunk("AllProducts", async () => {
-  const Data = await fetch("https://fakestoreapi.com/products").then(
-    (res) => res.json()
-  );
-  if (Data) { 
-    return Data;
-  }
-});
+  export const productsSlice = createSlice({
+    name: "products",
+    initialState,
+    reducers: {},
+    extraReducers(builder) {
+      builder
+        // products
+        .addCase(fetchAllProducts.fulfilled, (state, action) => {
+          state.products = action.payload;
+          state.productsLoading = false
+        })
+        .addCase(fetchAllProducts.pending, (state, action) => {
+          state.productsLoading =true
+        })
+        .addCase(fetchAllProducts.rejected, (state, action) => {
+          state.error = action.error.message
+          state.productsLoading= false
+        })
 
-const fetchProduct = createAsyncThunk("SingleProduct", async (productId: string) => {
-  const Data = await fetch(`https://fakestoreapi.com/products/${productId}`).then(
-    (res) => res.json()
-  );
-  if (Data) {
-    return Data;
-  }
-});
-
-
-export const productsSlice = createSlice({
-  name: "products",
-  initialState,
-  reducers: {
-
-  },
-  extraReducers(builder) {
-      builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
-        state.products = action.payload
-      }),
-
-
-      // fetchProducts
-      builder.addCase(fetchProduct.fulfilled, (state, action) => {
-        state.product = action.payload
-        state.loading = false
-      }),
-      builder.addCase(fetchProduct.pending, (state, action) => {
-        state.loading = true
-      })
-      builder.addCase(fetchProduct.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message
-      })
-  },
-});
-
-export { fetchAllProducts, fetchProduct }
-export const productReducer = productsSlice.reducer;
+        // product
+        .addCase(fetchProduct.pending, (state) => {
+          state.productLoading = true;
+          state.error = '';
+        })
+        .addCase(fetchProduct.fulfilled, (state, action) => {
+          state.product = action.payload;
+          state.productLoading = false;
+        })
+        .addCase(fetchProduct.rejected, (state, action) => {
+          state.productLoading = false;
+          state.error = action.error.message;
+        });
+    },
+  });
+  
+  export const productReducer = productsSlice.reducer;
